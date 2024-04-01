@@ -1,0 +1,15 @@
+-- 入口 ：  main.lua
+
+
+-- 通用:        
+--         BaseClass.lua
+--         Import.lua                  维护常用类的Require
+--         SingletonManager.lua        统一Require所有的单例
+
+-- UI：
+--      总UI入口
+--         UIMain.lua
+
+--     同一个UIModel：
+--         UIModelView.lua             管理所有UI元素的Require
+--         UIModel.lua                 维护具体的UI逻辑

@@ -1,0 +1,36 @@
+require("Assets.Scripts.LuaScripts.HotFix")
+require("Assets.Scripts.LuaScripts.Base.public")
+require("Assets.Scripts.LuaScripts.Base.lib")
+
+local test = require("Assets.Scripts.LuaScripts.test")
+
+
+local uimain
+
+function Awake()
+    print("------main Awake------")
+
+    --初始化Manager
+    EmailManager:Init()
+    --初始化主UI
+    uimain = UIMain.New()
+    uimain:OpenUI("UIMain")
+    
+end
+
+function Start()
+    print("-----main start-----")
+    test:test()
+end
+
+function Update()
+    print("-----main update-----")
+end
+
+function OnDestroy()
+    print("-----main OnDestroy------")
+    --XluaUtil.print_func_ref_by_csharp()
+    uimain:Delete()
+    test:test1()
+end
+
