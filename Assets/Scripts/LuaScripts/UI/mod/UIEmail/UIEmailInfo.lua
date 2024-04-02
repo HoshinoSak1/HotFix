@@ -116,7 +116,7 @@ function UIEmailInfo:OnPointDown()
 end
 
 function UIEmailInfo:__delete()
-    self.uiEmailItem.onPointerDown = nil
+    --self.uiEmailItem.onPointerDown = nil
 end
 
 return UIEmailInfo

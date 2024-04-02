@@ -247,7 +247,7 @@ function UIEmail:CloseUIEmail()
     self:RemoveDelegate()
 
     for i = 1, #self.uiEmailgo do
-        self.uiEmailgo[i]:Delete()
+        self.uiEmailgo[i]:Close()
     end
 
     self:Close()
