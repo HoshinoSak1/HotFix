@@ -18,11 +18,13 @@ public class EmailTester : MonoBehaviour
     public delegate void EmailGetDelegate(EmailInfo item);
     public event EmailGetDelegate getNewItem;
 
+    public static bool isGameOver = false;
+
     public static EmailTester Instance
     {
         get
         {
-            if (instance == null)
+            if (instance == null&& !isGameOver)
             {
                 var go = new GameObject("EmailTester");
                 instance = go.AddComponent<EmailTester>();
@@ -37,8 +39,6 @@ public class EmailTester : MonoBehaviour
 
     private void Awake()
     {
-        //LuaTable emailManager = LuaManager.luaEnv.Global.Get<LuaTable>("EmailManager");
-        //getNewItem = emailManager.Get<EmailGetDelegate>("GetNewEmail");
         Init();
     }
 
@@ -53,7 +53,7 @@ public class EmailTester : MonoBehaviour
 
     private void Init()
     {
-        for (int i = 0; i < Random.Range(10, 10); i++)
+        for (int i = 0; i < Random.Range(5, 5); i++)
         {
             count++;
             if (i % 3 == 0)
@@ -77,6 +77,7 @@ public class EmailTester : MonoBehaviour
                string.Format("EmailTester{0}", i), "只是测试而已", System.DateTime.Now.AddMinutes(Random.Range(-1000, 1000)), "2000000", "", EmailStatus.Finish));
             }
         }
+        DontDestroyOnLoad(this);
 
     }
     public void CreateNewEmail()
@@ -109,5 +110,6 @@ public class EmailTester : MonoBehaviour
     private void OnDisable()
     {
         getNewItem = null;
+        isGameOver = true;
     }
 }

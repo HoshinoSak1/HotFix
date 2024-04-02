@@ -40,6 +40,9 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(Tutorial.DerivedClassExtensions), TutorialDerivedClassExtensionsWrap.__Register);
         
         
+            translator.DelayWrapLoader(typeof(UIMessage.MessageBoxType), UIMessageMessageBoxTypeWrap.__Register);
+        
+        
             translator.DelayWrapLoader(typeof(Tutorial.DerivedClass.TestEnumInner), TutorialDerivedClassTestEnumInnerWrap.__Register);
         
         

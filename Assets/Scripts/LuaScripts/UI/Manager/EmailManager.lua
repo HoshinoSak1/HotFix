@@ -14,7 +14,6 @@ local EmailManager = {
     emailMaxCount = 10,
 }
 
-
 ---@func 初始化Manager
 function EmailManager:Init()
     local totalEmailCount = EmailTester.Instance.emailInfos.Count
@@ -23,6 +22,32 @@ function EmailManager:Init()
         local emailInfo = EmailInfo.New(EmailTester.Instance.emailInfos[i])
         self:SetNewEmail(emailInfo)
     end
+
+    self:AddDelegate()
+end
+
+function EmailManager:Close()
+    self:RemoveDelegate()
+end
+
+function EmailManager:AddDelegate()
+    self.getNewItemDelegate = function(email)
+        self:GetNewEmail(email)
+    end
+    EmailTester.Instance:getNewItem('+',self.getNewItemDelegate)
+end
+
+function EmailManager:RemoveDelegate()
+    EmailTester.Instance:getNewItem('-',self.getNewItemDelegate)
+end
+
+function EmailManager:GetDirLength()
+    local count = 0
+
+    for k,v in pairs(self.EmailInfoDir) do
+        count = count + 1
+    end
+    return count
 end
 
 ---@func 插入一封新邮件
@@ -56,13 +81,13 @@ end
 
 ---@func 超过上限处理
 function EmailManager:OverCountLimit()
-    if self.DeleteOvetLimitEmail(self.OldEmailWithoutItem) then
+    if self:DeleteOvetLimitEmail(self.OldEmailWithoutItem) then
         return
-    elseif self.DeleteOvetLimitEmail(self.OldEmailWithItem) then
+    elseif self:DeleteOvetLimitEmail(self.OldEmailWithItem) then
         return
-    elseif self.DeleteOvetLimitEmail(self.NewEmailWithoutItem)  then
+    elseif self:DeleteOvetLimitEmail(self.NewEmailWithoutItem)  then
         return
-    elseif self.DeleteOvetLimitEmail(self.NewEmailWithItem)  then
+    elseif self:DeleteOvetLimitEmail(self.NewEmailWithItem)  then
         return
     end
 end
@@ -109,7 +134,7 @@ end
 ---@func 删除指定list内的所有邮件
 function EmailManager:DeleteAllEmail(emailIdList)
     for i = 1, #emailIdList do
-        self.DeleteEmail(emailIdList[i])
+        self:DeleteEmail(emailIdList[i])
     end
     --通知uimail刷新
     Event:Invoke("UIRefresh",true)
@@ -118,7 +143,7 @@ end
 ---@func 按优先级删除指定列表中的邮件
 function EmailManager:DeleteOvetLimitEmail(list)
     local deleteEmailId = -1
-    deleteEmailId = self.GetLessTimeEmailId(list)
+    deleteEmailId = self:GetLessTimeEmailId(list)
     if deleteEmailId > 0 then
         self:DeleteOneEmail(deleteEmailId)
         return true
@@ -129,15 +154,16 @@ end
 ---@func 插入一封新邮件到指定列表A
 function EmailManager:ListAddEmail(list,newEmailInfo)
     local len = #list
-    local pos
-    for pos = len, 1, -1 do
-        local oldEmailInfo = self.EmailInfoDir[list[pos - 1]]
+    local pos = len
+    for i = len, 1, -1 do
+        local oldEmailInfo = self.EmailInfoDir[list[i]]
+        pos = i
         if self:CompareSendTime(newEmailInfo,oldEmailInfo) == false then
             table.insert(list,pos,newEmailInfo.emailId)
             return
         end
     end
-    table.insert(list,pos,newEmailInfo.emailId)
+    table.insert(list,1,newEmailInfo.emailId)
 end
 
 ---@func 比较两封邮件的发送时间
@@ -156,7 +182,7 @@ end
 
 ---@func 通知C#侧服务端删除过期数据
 function EmailManager:DeleteEmailOnTester(emailId)
-    EmailTester.Instance.emailInfos.Remove(self.EmailInfoDir[emailId])
+    EmailTester.Instance.emailInfos:Remove(self.EmailInfoDir[emailId])
 end
 
 ---@func 获取邮件道具

@@ -18,7 +18,9 @@ function Create(path)
         return
     end
     print("新模块加载成功")
-    return package.loaded[path]
+    local newModel = package.loaded[path]
+    newModel:Init()
+    return newModel
 end
 
 function Change(path)
@@ -40,6 +42,7 @@ function Delete(path)
     local oldModel 
     if package.loaded[path] then
         oldModel = package.loaded[path]
+        oldModel:Close()
         package.loaded[path] = nil
     else
         print("不存在此模块！")
@@ -59,7 +62,6 @@ function TableUpdate(new_table,old_table)
     --对比新旧表
     for key,newValue in pairs(new_table) do
         local oldValue = old_table[key]
-
         --类型无更新，查看是否值更新
         if type(oldValue) == type(newValue) then
             

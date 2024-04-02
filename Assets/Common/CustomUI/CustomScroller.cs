@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using XLua;
 
 public class CustomScroller : ScrollRect
 {
@@ -16,25 +17,21 @@ public class CustomScroller : ScrollRect
     public int maxViewElementCount = 0;
 
     private GameObject emailItemPrefab;
-
-    public int ElementCount { get => EmailManager.Instance.emailTotalCount;}
+    public int ElementCount;
 
     private GameObject[] childItems;
     private int childBufferStart = 0;
     private int dataIDStart = 0;
 
-    private EmailItemListView emailListView;
 
     private bool moveTrigger = true;
-    
-    public void Init(GameObject emailItemPrefab, EmailItemListView emailListView)
+
+    [CSharpCallLua]
+    public delegate void UPdateChildItemDelegate(GameObject uiEmailPrefab, int emailPos);
+    public event UPdateChildItemDelegate UPdateChildItem;
+    public void Init(GameObject emailItemPrefab)
     {
         this.onValueChanged.AddListener(OnScrollChanged);
-
-        if (this.emailListView == null)
-        {
-            this.emailListView = emailListView;
-        }
 
         this.emailItemPrefab = emailItemPrefab;
 
@@ -70,16 +67,6 @@ public class CustomScroller : ScrollRect
             ResetContent(false);
         }
     }
-
-    private void SetContentPostion()
-    {
-        if(emailListView == null|| emailListView.selectedId == -1) return;
-        int emailPosIdx = emailListView.GetPosFromID(emailListView.selectedId);
-        int emailPos = (int)(emailPosIdx * elementHeight);
-       
-        base.SetContentAnchoredPosition(new Vector2(0, emailPos));
-    }
-
 
     private void ResetContent(bool clearContents)
     {
@@ -141,31 +128,31 @@ public class CustomScroller : ScrollRect
         return idx % childItems.Length;
     }
 
-    private void UPdateChildItem(GameObject uiEmailPrefab,int emailPos)
-    {
-        if (emailPos < 0 || emailPos >= ElementCount)
-        {
-            uiEmailPrefab.gameObject.SetActive(false);
-        }
-        else
-        {
-            RectTransform rectTransform = uiEmailPrefab.GetComponent<RectTransform>();
-            Rect childRect = rectTransform.rect;
-            Vector2 pivot = rectTransform.pivot;
+    //private void UPdateChildItem(GameObject uiEmailPrefab,int emailPos)
+    //{
+    //    if (emailPos < 0 || emailPos >= ElementCount)
+    //    {
+    //        uiEmailPrefab.gameObject.SetActive(false);
+    //    }
+    //    else
+    //    {
+    //        RectTransform rectTransform = uiEmailPrefab.GetComponent<RectTransform>();
+    //        Rect childRect = rectTransform.rect;
+    //        Vector2 pivot = rectTransform.pivot;
 
-            float ytopPos = emailPos * elementHeight;
+    //        float ytopPos = emailPos * elementHeight;
 
-            float yPos = ytopPos + (1f - pivot.y) * childRect.height;
-            rectTransform.anchoredPosition = new Vector2(0, -yPos);
+    //        float yPos = ytopPos + (1f - pivot.y) * childRect.height;
+    //        rectTransform.anchoredPosition = new Vector2(0, -yPos);
 
-            UIEmailItem uiEmailItem = uiEmailPrefab.GetComponent<UIEmailItem>();
+    //        UIEmailItem uiEmailItem = uiEmailPrefab.GetComponent<UIEmailItem>();
             
-            emailListView.EmailItemSet(uiEmailItem, emailPos);
+    //        emailListView.EmailItemSet(uiEmailItem, emailPos);
            
-            uiEmailPrefab.gameObject.SetActive(true);
-        }
+    //        uiEmailPrefab.gameObject.SetActive(true);
+    //    }
         
-    }
+    //}
 
 
 }

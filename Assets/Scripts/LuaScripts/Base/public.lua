@@ -3,6 +3,7 @@ System = CS.System
 DateTime = System.DateTime
 EmailTester = CS.EmailTester
 UIRoot = UnityEngine.GameObject.Find("UI").transform
+UIMessage = CS.UIMessage
 
 ---@移除指定list的指定value
 function ListRemoveValue(list,value)

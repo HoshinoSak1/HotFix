@@ -36,6 +36,7 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.Ray2D>(translator.PushUnityEngineRay2D, translator.Get, translator.UpdateUnityEngineRay2D);
 				translator.RegisterPushAndGetAndUpdate<ReloadType>(translator.PushReloadType, translator.Get, translator.UpdateReloadType);
 				translator.RegisterPushAndGetAndUpdate<Tutorial.TestEnum>(translator.PushTutorialTestEnum, translator.Get, translator.UpdateTutorialTestEnum);
+				translator.RegisterPushAndGetAndUpdate<UIMessage.MessageBoxType>(translator.PushUIMessageMessageBoxType, translator.Get, translator.UpdateUIMessageMessageBoxType);
 				translator.RegisterPushAndGetAndUpdate<Tutorial.DerivedClass.TestEnumInner>(translator.PushTutorialDerivedClassTestEnumInner, translator.Get, translator.UpdateTutorialDerivedClassTestEnumInner);
 			
 			}
@@ -741,6 +742,90 @@ namespace XLua
             }
         }
         
+        int UIMessageMessageBoxType_TypeID = -1;
+		int UIMessageMessageBoxType_EnumRef = -1;
+        
+        public void PushUIMessageMessageBoxType(RealStatePtr L, UIMessage.MessageBoxType val)
+        {
+            if (UIMessageMessageBoxType_TypeID == -1)
+            {
+			    bool is_first;
+                UIMessageMessageBoxType_TypeID = getTypeId(L, typeof(UIMessage.MessageBoxType), out is_first);
+				
+				if (UIMessageMessageBoxType_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(UIMessage.MessageBoxType));
+				    UIMessageMessageBoxType_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, UIMessageMessageBoxType_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, UIMessageMessageBoxType_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for UIMessage.MessageBoxType ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, UIMessageMessageBoxType_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out UIMessage.MessageBoxType val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != UIMessageMessageBoxType_TypeID)
+				{
+				    throw new Exception("invalid userdata for UIMessage.MessageBoxType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for UIMessage.MessageBoxType");
+                }
+				val = (UIMessage.MessageBoxType)e;
+                
+            }
+            else
+            {
+                val = (UIMessage.MessageBoxType)objectCasters.GetCaster(typeof(UIMessage.MessageBoxType))(L, index, null);
+            }
+        }
+		
+        public void UpdateUIMessageMessageBoxType(RealStatePtr L, int index, UIMessage.MessageBoxType val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != UIMessageMessageBoxType_TypeID)
+				{
+				    throw new Exception("invalid userdata for UIMessage.MessageBoxType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for UIMessage.MessageBoxType ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         int TutorialDerivedClassTestEnumInner_TypeID = -1;
 		int TutorialDerivedClassTestEnumInner_EnumRef = -1;
         
@@ -896,6 +981,12 @@ namespace XLua
 				translator.PushTutorialTestEnum(L, array[index]);
 				return true;
 			}
+			else if (type == typeof(UIMessage.MessageBoxType[]))
+			{
+			    UIMessage.MessageBoxType[] array = obj as UIMessage.MessageBoxType[];
+				translator.PushUIMessageMessageBoxType(L, array[index]);
+				return true;
+			}
 			else if (type == typeof(Tutorial.DerivedClass.TestEnumInner[]))
 			{
 			    Tutorial.DerivedClass.TestEnumInner[] array = obj as Tutorial.DerivedClass.TestEnumInner[];
@@ -965,6 +1056,12 @@ namespace XLua
 			else if (type == typeof(Tutorial.TestEnum[]))
 			{
 			    Tutorial.TestEnum[] array = obj as Tutorial.TestEnum[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(UIMessage.MessageBoxType[]))
+			{
+			    UIMessage.MessageBoxType[] array = obj as UIMessage.MessageBoxType[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}

@@ -20,7 +20,7 @@ function EmailInfo:init( emailId, conditionId, emailTitle, emailSender, emailBod
     self.emailBody = emailBody
     self.emailSendTime = self:TimeTranslate(emailSendTime)
     self.lostTimer = lostTimer
-    self.emailStatus = status
+    self.emailStatus = status.value__
 
     self.itemIdLis = {}
     -- for itemId in itemIdLis:gmatch("[^|]+") do

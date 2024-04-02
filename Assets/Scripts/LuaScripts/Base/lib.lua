@@ -14,6 +14,9 @@ EmailManager = require("Assets.Scripts.LuaScripts.UI.Manager.EmailManager")
 UIBase = require("Assets.Scripts.LuaScripts.UI.uibase.uibase")
 UIMain = require("Assets.Scripts.LuaScripts.UI.uimain")
 UIEmail = require("Assets.Scripts.LuaScripts.UI.mod.UIEmail.UIEmail")
+UIEmailInfo = require("Assets.Scripts.LuaScripts.UI.mod.UIEmail.UIEmailInfo")
+EmailItemListView = require("Assets.Scripts.LuaScripts.UI.mod.UIEmail.EmailInfoListView")
+
 
 ---@info组件
 EmailInfo = require("Assets.Scripts.LuaScripts.UI.Info.EmailInfo")

@@ -1,14 +1,21 @@
 local UIBase = BaseClass.Create()
 
-UIBase.componentMap = {}
-UIBase.listener = {}
+function UIBase:__init()
+    self.componentMap = {}
+    self.listener = {}
+end
 
 function UIBase:OpenUI(uiName)
     self:Show(uiName)
     self:SetComponent()
+    self:Init()
 end
 
 function UIBase:SetComponent()
+    
+end
+
+function UIBase:Init()
     
 end
 
@@ -31,13 +38,15 @@ function UIBase:Show(uiName)
 end
 
 function UIBase:__delete()
-    self:Close()
+
 end
 
-function UIBase:Close()
+function UIBase:Close(needDestroy)
     self:removeButtonClickListener()
     UnityEngine.Object.Destroy(self.go)
-    self.go = nil
+    for key, value in pairs(self) do
+        self[key] = nil
+    end
 end
 
 function UIBase:GetUIComponent(ComponentName,type)
@@ -70,8 +79,11 @@ function UIBase:AddButtonClickListener(buttonName,callback)
 end
 
 function UIBase:removeButtonClickListener()
-    for _, button in pairs(self.listener) do
-        button.onClick:RemoveAllListeners()
+    if self.listener then
+        for _, button in pairs(self.listener) do
+            --button.onClick:RemoveAllListeners()
+            button.onClick = nil
+        end
     end
 end
 

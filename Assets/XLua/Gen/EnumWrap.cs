@@ -138,6 +138,64 @@ namespace XLua.CSObjectWrap
 		}
 	}
     
+    public class UIMessageMessageBoxTypeWrap
+    {
+		public static void __Register(RealStatePtr L)
+        {
+		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+		    Utils.BeginObjectRegister(typeof(UIMessage.MessageBoxType), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(UIMessage.MessageBoxType), L, translator, null, null, null, null, null);
+			
+			Utils.BeginClassRegister(typeof(UIMessage.MessageBoxType), L, null, 3, 0, 0);
+
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Information", UIMessage.MessageBoxType.Information);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "Confirm", UIMessage.MessageBoxType.Confirm);
+            
+
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
+            
+            Utils.EndClassRegister(typeof(UIMessage.MessageBoxType), L, translator);
+        }
+		
+		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int __CastFrom(RealStatePtr L)
+		{
+			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
+            if (lua_type == LuaTypes.LUA_TNUMBER)
+            {
+                translator.PushUIMessageMessageBoxType(L, (UIMessage.MessageBoxType)LuaAPI.xlua_tointeger(L, 1));
+            }
+			
+            else if(lua_type == LuaTypes.LUA_TSTRING)
+            {
+
+			    if (LuaAPI.xlua_is_eq_str(L, 1, "Information"))
+                {
+                    translator.PushUIMessageMessageBoxType(L, UIMessage.MessageBoxType.Information);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "Confirm"))
+                {
+                    translator.PushUIMessageMessageBoxType(L, UIMessage.MessageBoxType.Confirm);
+                }
+				else
+                {
+                    return LuaAPI.luaL_error(L, "invalid string for UIMessage.MessageBoxType!");
+                }
+
+            }
+			
+            else
+            {
+                return LuaAPI.luaL_error(L, "invalid lua type for UIMessage.MessageBoxType! Expect number or string, got + " + lua_type);
+            }
+
+            return 1;
+		}
+	}
+    
     public class TutorialDerivedClassTestEnumInnerWrap
     {
 		public static void __Register(RealStatePtr L)

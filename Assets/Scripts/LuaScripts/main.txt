@@ -2,8 +2,7 @@ require("Assets.Scripts.LuaScripts.HotFix")
 require("Assets.Scripts.LuaScripts.Base.public")
 require("Assets.Scripts.LuaScripts.Base.lib")
 
-local test = require("Assets.Scripts.LuaScripts.test")
-
+test = require("Assets.Scripts.LuaScripts.test") 
 
 local uimain
 
@@ -20,17 +19,16 @@ end
 
 function Start()
     print("-----main start-----")
-    test:test()
 end
 
 function Update()
     print("-----main update-----")
+    test:test()
 end
 
 function OnDestroy()
     print("-----main OnDestroy------")
-    --XluaUtil.print_func_ref_by_csharp()
-    uimain:Delete()
-    test:test1()
+    uimain:Close()
+    EmailManager:Close()
 end
 
